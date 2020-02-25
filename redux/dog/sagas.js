@@ -1,7 +1,6 @@
-import fetch from 'node-fetch';
 import { call, take, put } from '../lib/effects';
-import { text } from './junk';
-import {  fetchDogSuccess, fetchDogRequest } from './actions';
+import { api, text } from './junk';
+import { fetchDogSuccess, fetchDogRequest, fetchDogFailure } from './actions';
 import { DogActionTypes } from './constants';
 
 export function* woofWatcher() {
@@ -16,15 +15,15 @@ export function* woofWatcher() {
   }
 }
 
-const api = async url => {
-  const res = await fetch(url);
-  const json = await res.json();
-  return json;
-};
+
 export function* fetchWatcher() {
   while (true) {
     yield take(DogActionTypes.FETCH_DOG_REQUEST);
-    const { message } = yield call(api, 'https://dog.ceo/api/breeds/image/random');
-    yield put(fetchDogSuccess(message));
+    try {
+      const { message } = yield call(api, 'https://dog.ceo/api/breeds/image/random');
+      yield put(fetchDogSuccess(message));
+    } catch (err) {
+      yield put(fetchDogFailure(err))
+    }
   }
 }
