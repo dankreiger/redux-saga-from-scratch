@@ -7,7 +7,7 @@ import {
   increment,
   decrement
 } from './redux/counter/actions';
-import { fetchDog } from './redux/dog/actions';
+import { fetchDog, fetchDogRequest } from './redux/dog/actions';
 
 const {
   getState,
@@ -60,6 +60,6 @@ d.addEventListener('click', () => {
 });
 
 f.addEventListener('click', () => {
-  dispatch(fetchDog());
+  dispatch(fetchDogRequest());
 });
 

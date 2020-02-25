@@ -1,7 +1,8 @@
-import { call } from './lib/effects'
-import { woofWatcher } from './dog/sagas';
+import { fork } from './lib/effects'
+import { woofWatcher, fetchWatcher } from './dog/sagas';
 
 export function* rootSaga() {
-  yield call(woofWatcher);
+  yield fork(fetchWatcher);
+  yield fork(woofWatcher);
 }
 
