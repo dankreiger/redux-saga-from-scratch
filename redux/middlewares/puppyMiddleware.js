@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
 
 let actionsEmitter = new EventEmitter();
+// what strange hacking this is
 export async function runSaga(store, saga, ...args) {
   try {
     const it = saga(...args);
@@ -16,7 +17,9 @@ export async function runSaga(store, saga, ...args) {
           break
         case 'call':
           if(effect.fn.constructor.name === 'GeneratorFunction') {
-            result = await runSaga(store, effect.fn); // blocking
+            // here if we are calling another generator 
+            // this will be blocking just the like real redux saga call helper
+            result = await runSaga(store, effect.fn);
             result = it.next(result);
           } else {
             result = it.next(await effect.fn(...effect.args))
